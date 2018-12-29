@@ -76,9 +76,9 @@ resource "azurerm_network_interface" "usnc-ubuntu-nic" {
 
     ip_configuration {
         name = "${var.prefix}ipconfig"
-        subnet_id = "${var.azurerm_subnet.id}"
+        subnet_id = "${azurerm_subnet.id}"
         private_ip_address_allocation = "Dynamic"
-        public_ip_address_id = "${var.azurerm_public_ip.usnc-ubuntu-pip.id}"
+        public_ip_address_id = "${azurerm_public_ip.usnc-ubuntu-pip.id}"
     }
 
     tags {
