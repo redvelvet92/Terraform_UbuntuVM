@@ -18,7 +18,7 @@ resource "azurerm_virtual_network" "usnc-teds-vnet" {
     name = "${var.virtualnetwork}"
     location = "${var.location}"
     address_space = ["${var.address_space}"]
-    resource_group_name = "${var.resourcegroup.usnc-ubuntu-test.name}"
+    resource_group_name = "${azurerm_resource_group.usnc-ubuntu-test.name}"
     tags {
         Environment = "Ubuntu Terraform Deployment"
     }
@@ -90,7 +90,7 @@ resource "azurerm_network_interface" "usnc-ubuntu-nic" {
 resource "azurerm_public_ip" "usnc-ubuntu-pip" {
     name = "${var.prefix}-ip"
     location = "${var.location}"
-    resource_group_name = "${var.resourcegroup.usnc-ubuntu-test.name}"
+    resource_group_name = "${var.resourcegroup.name}"
     public_ip_address_allocation = "Dynamic"
     domain_name_label = "${var.hostname}"
 
@@ -102,7 +102,7 @@ resource "azurerm_public_ip" "usnc-ubuntu-pip" {
 resource "azurerm_virtual_machine" "usnc-ubuntu-vm" {
     name = "${var.hostname}-ubuntu"
     location = "${var.location}"
-    resource_group_name = "${var.resourcegroup.usnc-ubuntu-test.name}"
+    resource_group_name = "${var.resourcegroup.name}"
     vm_size = "${var.vmsize}"
     network_interface_ids =  ["${var.usnc-ubuntu-nic.id}"]
 
