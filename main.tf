@@ -26,12 +26,9 @@ resource "azurerm_virtual_network" "usnc-teds-vnet" {
 
 resource "azurerm_subnet" "subnet" {
     name = "${var.prefix}-subnet"
-    location = "${var.location}"
+    virtual_network_name = "${azurerm_virtual_network.usnc-teds-vnet.name}"
     address_prefix ="${var.address_prefix}"
     resource_group_name = "${azurerm_resource_group.usnc-ubuntu-test.name}"
-    tags {
-        Environment = "Ubuntu Terraform Deployment"
-    }
 }
 
 resource "azurerm_network_security_group" "usnc-teds-nsg" {
@@ -107,7 +104,7 @@ resource "azurerm_virtual_machine" "usnc-ubuntu-vm" {
     network_interface_ids =  ["${azurerm_network_interface.usnc-ubuntu-nic.usnc-ubuntu-nic.id}"]
 
     storage_image_reference {
-        publish = "Canonical"
+        publisher = "Canonical"
         offer = "UbuntuServer"
         sku = "16.04-LTS"
         version = "latest"
