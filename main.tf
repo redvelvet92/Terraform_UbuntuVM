@@ -104,7 +104,7 @@ resource "azurerm_virtual_machine" "usnc-ubuntu-vm" {
     location = "${var.location}"
     resource_group_name = "${azurerm_resource_group.usnc-ubuntu-test.name}"
     vm_size = "${var.vmsize}"
-    network_interface_ids =  ["${var.usnc-ubuntu-nic.id}"]
+    network_interface_ids =  ["${azurerm_network_interface.usnc-ubuntu-nic.usnc-ubuntu-nic.id}"]
 
     storage_image_reference {
         publish = "Canonical"
