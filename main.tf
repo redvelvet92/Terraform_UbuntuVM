@@ -35,7 +35,7 @@ resource "azurerm_subnet" "subnet" {
 }
 
 resource "azurerm_network_security_group" "usnc-teds-nsg" {
-    name = "${var.network_security_group}"
+    name = "${var.prefix}-nsg"
     location = "${var.location}"
     resource_group_name = "${azurerm_resource_group.usnc-ubuntu-test.name}"
     
