@@ -78,8 +78,6 @@ resource "azurerm_network_security_group" "usnc-teds-nsg" {
         Enviroment = "Teds Terraform Group"
     }
 }
-
-
 resource "azurerm_network_interface" "usnc-terraform-nic" {
     name = "${var.prefix}usnc-terraform-nic"
     location = "${var.location}"
