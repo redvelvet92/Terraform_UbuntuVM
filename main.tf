@@ -78,7 +78,7 @@ resource "azurerm_network_interface" "usnc-ubuntu-nic" {
         name = "${var.prefix}ipconfig"
         subnet_id = "${var.azurerm_subnet.id}"
         private_ip_address_allocation = "Dynamic"
-        public_ip_address_id = "${var.azurerm_public_ip.usnc-terraform-pip.id}"
+        public_ip_address_id = "${var.azurerm_public_ip.usnc-ubuntu-pip.id}"
     }
 
     tags {
