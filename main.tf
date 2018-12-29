@@ -28,7 +28,7 @@ resource "azurerm_subnet" "subnet" {
     name = "${var.subnet}"
     location = "${var.location}"
     address_prefix ="${var.address_prefix}"
-    resource_group_name = "${var.resourcegroup.usnc-ubuntu-test.name}"
+    resource_group_name = "${azurerm_resource_group.usnc-ubuntu-test.name}"
     tags {
         Environment = "Ubuntu Terraform Deployment"
     }
@@ -37,7 +37,7 @@ resource "azurerm_subnet" "subnet" {
 resource "azurerm_network_security_group" "usnc-teds-nsg" {
     name = "${var.network_security_group}"
     location = "${var.location}"
-    resource_group_name = "${var.resourcegroup.usnc-ubuntu-test.name}"
+    resource_group_name = "${azurerm_resource_group.usnc-ubuntu-test.name}"
     
     security_rule {
     name = "HTTP"
@@ -90,7 +90,7 @@ resource "azurerm_network_interface" "usnc-ubuntu-nic" {
 resource "azurerm_public_ip" "usnc-ubuntu-pip" {
     name = "${var.prefix}-ip"
     location = "${var.location}"
-    resource_group_name = "${var.resourcegroup.name}"
+    resource_group_name = "${azurerm_resource_group.usnc-ubuntu-test.name}"
     public_ip_address_allocation = "Dynamic"
     domain_name_label = "${var.hostname}"
 
@@ -102,7 +102,7 @@ resource "azurerm_public_ip" "usnc-ubuntu-pip" {
 resource "azurerm_virtual_machine" "usnc-ubuntu-vm" {
     name = "${var.hostname}-ubuntu"
     location = "${var.location}"
-    resource_group_name = "${var.resourcegroup.name}"
+    resource_group_name = "${azurerm_resource_group.usnc-ubuntu-test.name}"
     vm_size = "${var.vmsize}"
     network_interface_ids =  ["${var.usnc-ubuntu-nic.id}"]
 
