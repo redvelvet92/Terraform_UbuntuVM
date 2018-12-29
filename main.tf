@@ -70,7 +70,7 @@ resource "azurerm_network_security_group" "usnc-teds-nsg" {
 resource "azurerm_network_interface" "usnc-ubuntu-nic" {
     name = "${var.prefix}usnc-ubuntu-nic"
     location = "${var.location}"
-    resource_group_name = "${var.resourcegroup.usnc-ubuntu-test.name}"
+    resource_group_name = "${azurerm_resource_group.usnc-ubuntu-test.name}"
     network_security_group_id = "${var.azurerm_network_security_group.usnc-teds-nsg}"
 
 
