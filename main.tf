@@ -25,7 +25,7 @@ resource "azurerm_virtual_network" "usnc-teds-vnet" {
 }
 
 resource "azurerm_subnet" "subnet" {
-    name = "${var.subnet}"
+    name = "${var.prefix}-subnet"
     location = "${var.location}"
     address_prefix ="${var.address_prefix}"
     resource_group_name = "${azurerm_resource_group.usnc-ubuntu-test.name}"
