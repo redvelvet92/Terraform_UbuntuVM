@@ -6,11 +6,11 @@
 
 
 # Resource Group
-resource "azurerm_resource_group" "usnc-terraform-test" {
+resource "azurerm_resource_group" "usnc-ubuntu-test" {
     name = "${var.resourcegroup}"
     location = "${var.location}"
     tags {
-        Enviroment = "Teds Terraform Group"
+        Environment = "Ubuntu Terraform Deployment"
     }
 }
 
@@ -20,7 +20,7 @@ resource "azurerm_virtual_network" "usnc-teds-vnet" {
     address_space = ["${var.address_space}"]
     resource_group_name = "${var.resource_group_name.name}"
     tags {
-        Enviroment = "Teds Terraform Group"
+        Environment = "Ubuntu Terraform Deployment"
     }
 }
 
@@ -30,7 +30,7 @@ resource "azurerm_subnet" "subnet" {
     address_prefix ="${var.address_prefix}"
     resource_group_name = "${var.resource_group_name.name}"
     tags {
-        Environment = "Teds Terraform Group"
+        Environment = "Ubuntu Terraform Deployment"
     }
 }
 
@@ -63,23 +63,23 @@ resource "azurerm_network_security_group" "usnc-teds-nsg" {
     }
 
     security_rule {
-    name = "RDP"
+    name = "ssh"
     priority = 101
     direction = "Inbound"
     access = "allow"
     protocol = "tcp"
     source_port_range = "*"
-    destination_port_range = "3389"
+    destination_port_range = "22"
     source_address_prefix = "${var.source_network}"
     destination_address_prefix = "*"
     }
 
     tags {
-        Enviroment = "Teds Terraform Group"
+        Environment = "Ubuntu Terraform Deployment"
     }
 }
-resource "azurerm_network_interface" "usnc-terraform-nic" {
-    name = "${var.prefix}usnc-terraform-nic"
+resource "azurerm_network_interface" "usnc-ubuntu-nic" {
+    name = "${var.prefix}usnc-ubuntu-nic"
     location = "${var.location}"
     resource_group_name = "${var.azurerm_resource_group.name}"
     network_security_group_id = "${var.azurerm_network_security_group.usnc-teds-nsg}"
@@ -93,9 +93,51 @@ resource "azurerm_network_interface" "usnc-terraform-nic" {
     }
 
     tags {
-        Enviroment = "Teds Terraform Group"
+        Environment = "Ubuntu Terraform Deployment"
     }
 }
+
+
+resource "azurerm_public_ip" "usnc-ubuntu-pip" {
+    name = "${var.prefix}-ip"
+    location = "${var.location}"
+    resource_group_name = "${var.resource_group_name.name}"
+    public_ip_address_allocation = "Dynamic"
+    domain_name_label = "${var.hostname}"
+
+    tags {
+        Environment = "Ubuntu Terraform Deployment"
+    }
+}
+
+resource "azurerm_virtual_machine" "usnc-ubuntu-vm" {
+    name = "${var.hostname-ubuntu}"
+    location = "${var.location}"
+    resource_group_name = "${var.resource_group_name.name}"
+    vm_size = "${var.vmsize}"
+    network_interface_ids =  ["${var.usnc-ubuntu-nic.id}"]
+
+    storage_image_reference {
+        publish = "Canonical"
+        offer = "UbuntuServer"
+        sku = "16.04-LTS"
+        version = "latest"
+    }
+    storage_os_disk {
+        name = "ubuntuosdisk"
+        caching = "ReadWrite"
+        create_option = "FromImage"
+        managed_disk_type = "Standard_LRS"
+    }
+    os_profile {
+        computer_name = "usnc-ubuntu"
+        admin_username = "rkdtmartin"
+
+    }
+
+
+}
+
 
 
 
