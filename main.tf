@@ -131,10 +131,17 @@ resource "azurerm_virtual_machine" "usnc-ubuntu-vm" {
     }
     os_profile {
         computer_name = "usnc-ubuntu"
-        admin_username = "rkdtmartin"
-
+        admin_username = "testuser"
+        admin_password = "password123"
     }
 
+    os_profile_linux_config {
+        disable_password_authentication = false
+    }    
+
+    tags {
+        Environment = "Ubuntu Terraform Deployment"
+    }
 
 }
 
