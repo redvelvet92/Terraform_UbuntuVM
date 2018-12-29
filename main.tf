@@ -18,7 +18,7 @@ resource "azurerm_virtual_network" "usnc-teds-vnet" {
     name = "${var.virtualnetwork}"
     location = "${var.location}"
     address_space = ["${var.address_space}"]
-    resource_group_name = "${var.resource_group_name.name}"
+    resource_group_name = "${var.resourcegroup.name}"
     tags {
         Environment = "Ubuntu Terraform Deployment"
     }
@@ -28,27 +28,16 @@ resource "azurerm_subnet" "subnet" {
     name = "${var.subnet}"
     location = "${var.location}"
     address_prefix ="${var.address_prefix}"
-    resource_group_name = "${var.resource_group_name.name}"
+    resource_group_name = "${var.resourcegroup.name}"
     tags {
         Environment = "Ubuntu Terraform Deployment"
     }
 }
 
-##############################################################################
-# * Build an Windows Server 2016 Datacenter VM
-#
-# Now that we have a network, we'll deploy an Windows Server 2016.
-# An Azure Virtual Machine has several components. In this example we'll build
-# a security group, a network interface, a public ip address, a storage 
-# account and finally the VM itself. Terraform handles all the dependencies 
-# automatically, and each resource is named with user-defined variables.
-
-
-
 resource "azurerm_network_security_group" "usnc-teds-nsg" {
     name = "${var.network_security_group}"
     location = "${var.location}"
-    resource_group_name = "${var.resource_group_name.name}"
+    resource_group_name = "${var.resourcegroup.name}"
     
     security_rule {
     name = "HTTP"
@@ -81,7 +70,7 @@ resource "azurerm_network_security_group" "usnc-teds-nsg" {
 resource "azurerm_network_interface" "usnc-ubuntu-nic" {
     name = "${var.prefix}usnc-ubuntu-nic"
     location = "${var.location}"
-    resource_group_name = "${var.azurerm_resource_group.name}"
+    resource_group_name = "${var.azurerm_resourcegroup.name}"
     network_security_group_id = "${var.azurerm_network_security_group.usnc-teds-nsg}"
 
 
@@ -101,7 +90,7 @@ resource "azurerm_network_interface" "usnc-ubuntu-nic" {
 resource "azurerm_public_ip" "usnc-ubuntu-pip" {
     name = "${var.prefix}-ip"
     location = "${var.location}"
-    resource_group_name = "${var.resource_group_name.name}"
+    resource_group_name = "${var.resourcegroup.name}"
     public_ip_address_allocation = "Dynamic"
     domain_name_label = "${var.hostname}"
 
@@ -111,9 +100,9 @@ resource "azurerm_public_ip" "usnc-ubuntu-pip" {
 }
 
 resource "azurerm_virtual_machine" "usnc-ubuntu-vm" {
-    name = "${var.hostname-ubuntu}"
+    name = "${var.hostname}-ubuntu"
     location = "${var.location}"
-    resource_group_name = "${var.resource_group_name.name}"
+    resource_group_name = "${var.resourcegroup.name}"
     vm_size = "${var.vmsize}"
     network_interface_ids =  ["${var.usnc-ubuntu-nic.id}"]
 
@@ -124,15 +113,15 @@ resource "azurerm_virtual_machine" "usnc-ubuntu-vm" {
         version = "latest"
     }
     storage_os_disk {
-        name = "ubuntuosdisk"
+        name = "${var.hostname}-osdisk"
         caching = "ReadWrite"
         create_option = "FromImage"
         managed_disk_type = "Standard_LRS"
     }
     os_profile {
-        computer_name = "usnc-ubuntu"
-        admin_username = "testuser"
-        admin_password = "password123"
+        computer_name = "${var.hostname}"
+        admin_username = "${var.username}"
+        admin_password = "${var.password}"
     }
 
     os_profile_linux_config {
