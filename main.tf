@@ -64,8 +64,8 @@ resource "azurerm_network_security_group" "usnc-teds-nsg" {
         Environment = "Ubuntu Terraform Deployment"
     }
 }
-resource "azurerm_network_interface" "usnc-ubuntu-nic" {
-    name = "${var.prefix}usnc-ubuntu-nic"
+resource "azurerm_network_interface" "usnc_ubuntu_nic" {
+    name = "${var.prefix}usnc_ubuntu_nic"
     location = "${var.location}"
     resource_group_name = "${azurerm_resource_group.usnc-ubuntu-test.name}"
     network_security_group_id = "${azurerm_network_security_group.usnc-teds-nsg.id}"
@@ -75,7 +75,7 @@ resource "azurerm_network_interface" "usnc-ubuntu-nic" {
         name = "${var.prefix}ipconfig"
         subnet_id = "${azurerm_subnet.subnet.id}"
         private_ip_address_allocation = "Dynamic"
-        public_ip_address_id = "${azurerm_public_ip.usnc-ubuntu-pip.id}"
+        public_ip_address_id = "${azurerm_public_ip.usnc_ubuntu_pip.id}"
     }
 
     tags {
@@ -84,7 +84,7 @@ resource "azurerm_network_interface" "usnc-ubuntu-nic" {
 }
 
 
-resource "azurerm_public_ip" "usnc-ubuntu-pip" {
+resource "azurerm_public_ip" "usnc_ubuntu_pip" {
     name = "${var.prefix}-ip"
     location = "${var.location}"
     resource_group_name = "${azurerm_resource_group.usnc-ubuntu-test.name}"
@@ -101,7 +101,7 @@ resource "azurerm_virtual_machine" "usnc-ubuntu-vm" {
     location = "${var.location}"
     resource_group_name = "${azurerm_resource_group.usnc-ubuntu-test.name}"
     vm_size = "${var.vmsize}"
-    network_interface_ids =  ["${azurerm_network_interface.usnc-ubuntu-nic.usnc-ubuntu-nic.id}"]
+    network_interface_ids =  ["${azurerm_network_interface.usnc-ubuntu-nic.usnc_ubuntu_nic.id}"]
 
     storage_image_reference {
         publisher = "Canonical"
